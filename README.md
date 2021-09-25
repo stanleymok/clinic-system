@@ -1,5 +1,5 @@
 # clinic-system
-For more info on entity relations, please refer to DEV-GUIDE.md
+For more info on entity relations and setup, please refer to DEV-GUIDE.md
 
 
 
