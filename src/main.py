@@ -4,7 +4,7 @@ from db_manager import DBM
 
 HELP_TEXTS = ["", "==================== HELP ========================", 
                 "Read csv: type <read_csv>",
-                "Get appts: type <get_appt>",
+                "Get appt: type <get_appt>",
                 "Fix appt: type <fix_appt>",
                 "Del appt: type <del_appt>",
                 "Exit: type <exit>",
@@ -25,6 +25,7 @@ class Server:
     def read_file(self):
         print("Input file name: ")
         file_name = input()
+        print("\n===================== RUNNING =======================")
         f = open(CWD + PATH_TO_INPUTS + file_name,"r")
         lines = f.readlines()[1:]
         # data processing
@@ -58,7 +59,7 @@ class Server:
         print("Input time: format <hh>:<mm>:<ss>")
         time = input()
         self.dbm.get_appts(doc_id, date, time)
-        print("Select statement executed successfully.")
+
         self.print_help()
 
     def fix_appt(self):
@@ -71,7 +72,6 @@ class Server:
         print("Input time: format <hh>:<mm>:<ss>")
         time = input()
         self.dbm.fix_appt(patient_name, doc_id, date, time)
-        print("Insert statement executed successfully.")
         self.print_help()
 
     def del_appt(self):
@@ -84,8 +84,7 @@ class Server:
         print("Input time: format <hh>:<mm>:<ss>")
         time = input()
         self.dbm.del_appt(patient_name, doc_id, date, time)
-        print("============================================")
-        print("Delete statement executed successfully.")
+
         self.print_help()
 
     def run(self):

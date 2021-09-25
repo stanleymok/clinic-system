@@ -47,29 +47,34 @@ class DBM:
                 self.conn.commit()
 
         def get_appts(self, doc_id, date, time):
+                print("\n===================== RUNNING =======================")
                 cursor = self.conn.execute(f"SELECT * FROM APPOINTMENTS WHERE DOC_ID = \"{doc_id}\" AND DATE = \"{date}\" AND TIME = \"{time}\";")
                 for row in cursor:
                         print(row)
+                print("Select statement executed successfully.")
                                 
         def fix_appt(self, patient_name, doc_id, date, time):
-                cursor = self.conn.execute(f"SELECT MAX(APPT_ID) FROM APPOINTMENTS")   
-                appt_id = cursor.fetchone()[0]
-                # inc id by one
-                appt_id = appt_id[0] + str(int(appt_id[1:]) + 1)
-                print(appt_id)
-                self.conn.execute("INSERT INTO APPOINTMENTS (APPT_ID, PATIENT_NAME, DOC_ID, DATE, TIME) \
-                                        values (?, ?, ?, ?, ?)", (appt_id, patient_name, doc_id, date, time))
-                self.conn.commit()
+                print("\n===================== RUNNING =======================")
+                time_wo_colon = time[0:2] + time[3:5] + time[6:8]
+                if time_wo_colon >= "080000" and time_wo_colon <= "160000":
+                        # get biggest appt_id primary key from table and increment
+                        cursor = self.conn.execute(f"SELECT MAX(APPT_ID) FROM APPOINTMENTS")                           
+                        appt_id = cursor.fetchone()[0]
+                        # inc id by one
+                        appt_id = appt_id[0] + str(int(appt_id[1:]) + 1)
+                        self.conn.execute("INSERT INTO APPOINTMENTS (APPT_ID, PATIENT_NAME, DOC_ID, DATE, TIME) \
+                                                values (?, ?, ?, ?, ?)", (appt_id, patient_name, doc_id, date, time))
+                        self.conn.commit()
+                        print("Insert statement executed successfully.")
+                else:
+                        print("Doctor's consultation time between 080000 to 160000")
 
         def del_appt(self, patient_name, doc_id, date, time):
-                cursor = self.conn.execute(f"SELECT MAX(APPT_ID) FROM APPOINTMENTS")   
-                appt_id = cursor.fetchone()[0]
-                # inc id by one
-                appt_id = appt_id[0] + str(int(appt_id[1:]) + 1)
-                print(appt_id)
+                print("\n===================== RUNNING =======================")
                 self.conn.execute(f"DELETE FROM APPOINTMENTS WHERE PATIENT_NAME = \"{patient_name}\" AND DOC_ID = \
                                         \"{doc_id}\" AND  DATE = \"{date}\" AND TIME = \"{time}\";")
                 self.conn.commit()
+                print("Delete statement executed successfully.")
 
 
         def close(self):
